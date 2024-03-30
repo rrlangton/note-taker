@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
-const api = require('./')
+const api = require('./');
+const { randomUUID } = require('crypto');
 
 const PORT = process.env.PORT || 3001;
 
@@ -15,20 +16,36 @@ app.use(express.static('public'));
 // note path to database
 const notePath = path.resolve(__dirname, 'db', 'db.json');
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/Develop/public/index.html'));
+// GET route for notes 
+app.get('/api/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, '/Develop/public/notes.html'))
 });
 
-app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, '/Develop/public/notes.html'))
-})
+// POST route for notes
+app.post('/api/notes', (req, res) => {
+    console.log(req.body);
 
-// wildcard route to index.html
+        const { title, text } = req.body;
+        if (req.body) {
+            const newNote = {
+                title,
+                text,
+                note_id: uuidv2(),
+            };
+
+            readAndAppend(newNote, './Develop/db/db.json');
+            res.json('Successfully recorded the note');
+        } else {
+            res.error('Please include a title and text');
+        };
+});
+
+// wildcard GET route to index.html
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/Develop/public/index.html'))
 });
 
 app.listen(PORT, () =>
-console.log(`App listening at http://localhost:${PORT}`))
+console.log(`App listening at http://localhost:${PORT}`));
 
 module.exports = notes;
