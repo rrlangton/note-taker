@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const api = require('./Develop/public/assets/js/index.js');
+const api = require('./Develop/public/assets/js/index');
 const { randomUUID } = require('crypto');
 
 const PORT = process.env.PORT || 3001;
