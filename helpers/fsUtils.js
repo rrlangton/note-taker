@@ -28,10 +28,11 @@ const readAndDeleteId = (content, file) => {
             console.error(err)
         } else {
             const parsedData = JSON.parse(data);
-            parsedData.push(content);
-            writeToFile(file, parsedData);
+            const newParsedData = parsedData.filter(data => data.id != content)
+            writeToFile(file, newParsedData);
+            return newParsedData;
         };
     });
 };
 
-module.exports = {readFromFile, readAndAppend, writeToFile}
+module.exports = {readFromFile, readAndAppend, writeToFile, readAndDeleteId}

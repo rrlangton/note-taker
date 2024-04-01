@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const PORT = process.env.PORT || 3001;
-const {readFromFile, readAndAppend} = require('./helpers/fsUtils');
+const {readFromFile, readAndAppend, readAndDeleteId} = require('./helpers/fsUtils');
 const app = express();
 
 // middleware
@@ -17,6 +17,12 @@ const notePath = path.resolve(__dirname, 'db', 'db.json');
 app.get('/api/notes', (req, res) => {
     readFromFile ('./db/db.json').then(note => {
         res.json(JSON.parse(note))})
+});
+app.delete('/api/notes/:id',(req, res) => { 
+    const id = req.params.id
+    console.log(id);
+    const parsedData = readAndDeleteId(id,'./db/db.json')
+    res.json(parsedData)
 });
 
 // POST route for notes
